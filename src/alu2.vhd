@@ -4,9 +4,9 @@ use ieee.numeric_std.all;
 
 entity ALU2 is
     port (
-        op    : in std_logic_vector(1 downto 0);
-        busA, busB  : in std_logic_vector(31 downto 0);
-        busW     : out std_logic_vector(31 downto 0);
+        op           : in std_logic_vector(1 downto 0);
+        busA, busB   : in std_logic_vector(31 downto 0);
+        busW         : out std_logic_vector(31 downto 0);
         flagN, flagZ : out std_logic
     );
 end entity;
