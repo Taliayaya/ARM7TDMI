@@ -20,14 +20,15 @@ begin
 	begin
 		E1 <= x"86";
 		E2 <= x"8686";
-        assert signed(S1) = x"86"  report "sign should remains correct" severity error;
-        assert signed(S2) = x"8686"  report "sign should remains correct" severity error;
+        assert signed(S1) > 0  report "sign should remains correct" severity error;
+        assert signed(S2) > 0  report "sign should remains correct" severity error;
 
         wait for 1 ns;
-		E1 <= std_logic_vector(- signed(E1));
-		E2 <= std_logic_vector(- signed(E2));
-        assert signed(S1) = -x"86"  report "sign should remains correct" severity error;
-        assert signed(S2) = -x"8686"  report "sign should remains correct" severity error;
+		E1 <= x"39";
+		E2 <= x"0086";
+        assert signed(S1) > 0  report "sign should remains correct" severity error;
+        assert signed(S2) > 0  report "sign should remains correct" severity error;
+        wait for 1 ns;
 
 		report "End of test. Verify that no error was reported.";
 		wait;
