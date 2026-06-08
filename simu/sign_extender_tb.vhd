@@ -20,12 +20,15 @@ begin
 	begin
 		E1 <= x"86";
 		E2 <= x"8686";
-        assert signed(S1) > 0  report "sign should remains correct" severity error;
-        assert signed(S2) > 0  report "sign should remains correct" severity error;
+        wait for 1 us;
+        assert signed(S1) < 0  report "sign should remains correct" severity error;
+        assert signed(S2) < 0  report "sign should remains correct" severity error;
 
         wait for 1 ns;
+
 		E1 <= x"39";
 		E2 <= x"0086";
+        wait for 1 us;
         assert signed(S1) > 0  report "sign should remains correct" severity error;
         assert signed(S2) > 0  report "sign should remains correct" severity error;
         wait for 1 ns;

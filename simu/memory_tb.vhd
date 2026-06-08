@@ -32,7 +32,6 @@ begin
 
         for i in 0 to 63 loop
             Addr <= Std_logic_vector(To_unsigned(I, 6));
-            wait for 10 NS;
             DataIn <= std_logic_vector(to_unsigned(I, 32));
             wait for 10 NS;
             WrEn <= '1';
