@@ -33,6 +33,5 @@ architecture RTL of INSTRUCTION_MEMORY is
     signal mem: RAM64x32 := init_mem;
 
 begin
-    Instruction <= mem(to_integer(unsigned (PC)));
-
+    Instruction <= mem(to_integer(unsigned(PC(5 downto 0))));
 end architecture;

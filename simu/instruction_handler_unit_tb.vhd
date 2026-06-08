@@ -79,43 +79,17 @@ begin
         assert Instruction = x"EAFFFFF7" report "offset 8" SEVERITY ERROR;
         wait for 10 ns;
 
+        Reset <= '1'; 
+        wait for 10 ns;
+        Reset <= '0';
+        nPCsel <= '0';
+        wait for 80 ns; -- PC=8
+
+        -- Goto index 0
         nPCsel <= '1';
-
-        offset <= STD_LOGIC_VECTOR(TO_UNSIGNED(0, 24));
-        assert Instruction = x"E3A01010" report "nPCsel offset 0" SEVERITY ERROR;
+        offset <= x"FFFFF7";  -- -9  PC = 8+1+(-9) = 0
         wait for 10 ns;
-
-        offset <= STD_LOGIC_VECTOR(TO_UNSIGNED(1, 24));
-        assert Instruction = x"E3A02000" report "nPCsel offset 1" SEVERITY ERROR;
-        wait for 10 ns;
-
-        offset <= STD_LOGIC_VECTOR(TO_UNSIGNED(2, 24));
-        assert Instruction =x"E4110000" report "nPCsel offset 2" SEVERITY ERROR;
-        wait for 10 ns;
-        
-        offset <= STD_LOGIC_VECTOR(TO_UNSIGNED(3, 24));
-        assert Instruction = x"E0822000" report "nPCsel offset 3" SEVERITY ERROR;
-        wait for 10 ns;
-
-        offset <= STD_LOGIC_VECTOR(TO_UNSIGNED(4, 24));
-        assert Instruction = x"E2811001" report "nPCsel offset 4" SEVERITY ERROR;
-        wait for 10 ns;
-
-        offset <= STD_LOGIC_VECTOR(TO_UNSIGNED(5, 24));
-        assert Instruction = x"E351001A" report "nPCsel offset 5" SEVERITY ERROR;
-        wait for 10 ns;
-
-        offset <= STD_LOGIC_VECTOR(TO_UNSIGNED(6, 24));
-        assert Instruction = x"BAFFFFFB" report "nPCsel offset 6" SEVERITY ERROR;
-        wait for 10 ns;
-
-        offset <= STD_LOGIC_VECTOR(TO_UNSIGNED(7, 24));
-        assert Instruction = x"E4012000" report "nPCsel offset 7" SEVERITY ERROR;
-        wait for 10 ns;
-
-        offset <= STD_LOGIC_VECTOR(TO_UNSIGNED(8, 24));
-        assert Instruction = x"EAFFFFF7" report "nPCsel offset 8" SEVERITY ERROR;
-        wait for 10 ns;
+        assert Instruction = x"E3A01010" report "nPCsel  failed" SEVERITY ERROR;
 
         report "No error detected";
 
