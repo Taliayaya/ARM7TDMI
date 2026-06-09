@@ -5,8 +5,9 @@ use IEEE.numeric_std.all;
 entity ONE_REGISTER is
     port (Clk: in STD_LOGIC;
          Reset: in STD_LOGIC;
+         WE: in STD_LOGIC;
          W: in STD_LOGIC_VECTOR(31 downto 0);
-         Value: out STD_LOGIC_VECTOR(31 downto 0)   
+         Value: out STD_LOGIC_VECTOR(31 downto 0) := (others => '0')
     );
 end entity;
 
@@ -17,7 +18,9 @@ begin
     if Reset = '1' then
         Value <= (others => '0');
     elsif rising_edge(Clk) then
+        if WE = '1' then
             Value <= W;
+        end if;
     end if;
 end process;
 end architecture;

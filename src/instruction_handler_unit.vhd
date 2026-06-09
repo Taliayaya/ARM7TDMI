@@ -39,6 +39,7 @@ begin
         Clk => Clk,
         Reset => Reset,
         W => PC_in,
+        WE => '1',
         Value => PC_out 
     );
 
