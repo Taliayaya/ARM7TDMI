@@ -136,6 +136,7 @@ begin
                 RN <= inRegSrcN;
                 MemWr <= '1';
                 RegSel <= '1'; -- RD is used as if it was RM for data
+                RegAff <= '1';  
                 -- offset not yet handled
                 -- PUBW not yet handled
             when BAL =>

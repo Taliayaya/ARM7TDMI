@@ -27,6 +27,8 @@ architecture RTL of INSTRUCTION_MEMORY is
             result (6):=x"BAFFFFFB";-- 0x6 -- BLT loop -- PC =PC+1+(-5) si N = 1
             result (7):=x"E4012000";-- 0x7 -- STR R2,0(R1) -- DATAMEM[R1] = R2
             result (8):=x"EAFFFFF7";-- 0x8 -- BAL main -- PC=PC+1+(-9)
+
+          
             return result;
     end init_mem;
 

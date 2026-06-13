@@ -34,13 +34,13 @@ begin
         S => S
     );
 
-    PC_Register: entity work.ONE_REGISTER
+    Reg_PC: entity work.ONE_REGISTER
     port map (
         Clk => Clk,
-        Reset => Reset,
-        W => PC_in,
+        Rst => Reset,
+        DataIN =>  PC_in,
         WE => '1',
-        Value => PC_out 
+        DataOut =>  PC_out 
     );
 
     MUX: entity work.MUX2x1
