@@ -11,6 +11,7 @@ entity INSTRUCTION_DECODER is
         RegWr           : out std_logic;
         MemWr           : out std_logic;
         WrSrc           : out std_logic;
+        IRQ_END         : out std_logic := '0';
         RegSel          : out std_logic;
         RegAff          : out std_logic;
         ALUSrc          : out std_logic;
@@ -22,7 +23,7 @@ entity INSTRUCTION_DECODER is
 end entity;
 
 architecture RTL of INSTRUCTION_DECODER is
-    type enum_instruction is (MOV, ADDi, ADDr, CMP, LDR, STR, BAL, BLT, ERROR);
+    type enum_instruction is (MOV, ADDi, ADDr, CMP, LDR, STR, BAL, BLT, BX, ERROR);
     signal instr_courante: enum_instruction;
 
     constant ALU_ADD  : std_logic_vector(1 downto 0) := "00";  -- Y = A + B
@@ -64,18 +65,22 @@ begin
                 when "1010" => instr_courante <= CMP;
                 when others => instr_courante <= ERROR;
             end case;
-        elsif Instruction(27 downto 25) = "101" then
+        elsif Instruction(27 downto 24) = "1010" then
             case Condition is
                 when COND_ALWAYS => instr_courante <= BAL;
                 when COND_LESST => instr_courante <= BLT;
                 when others => instr_courante <= ERROR;
             end case;
+        elsif Instruction(27 downto 24) = "1011" then
+            instr_courante <= BX;
         end if;
+
     end process;
 
     -- good luck
     process(Instruction, instr_courante, CPSR)
     begin
+        IRQ_END <= '0';
         nPCsel <= '0';
         PSREn  <= '0';
         RegWr  <= '0';
@@ -147,6 +152,8 @@ begin
                     nPCsel <= '1';
                     Imm24 <= Instruction(23 downto 0);
                 end if;
+            when BX =>
+                IRQ_END <= '1';
             when others =>
                 -- TODO
         end case;

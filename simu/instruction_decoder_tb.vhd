@@ -13,6 +13,7 @@ architecture BENCH of INSTRUCTION_DECODER_TB is
     signal RegWr           : std_logic;
     signal MemWr           : std_logic;
     signal WrSrc           : std_logic;
+    signal IRQ_END         : std_logic;
     signal RegSel          : std_logic;
     signal RegAff          : std_logic;
     signal ALUSrc          : std_logic;
@@ -36,6 +37,7 @@ begin
         RegWr           =>  RegWr           ,
         MemWr           =>  MemWr           ,
         WrSrc           =>  WrSrc           ,
+        IRQ_END         =>  IRQ_END         ,
         RegSel          =>  RegSel          ,
         RegAff          =>  RegAff          ,
         ALUSrc          =>  ALUSrc          ,
@@ -48,7 +50,7 @@ begin
     );
 
     process
-    type enum_instruction is (MOV, ADDi, ADDr, CMP, LDR, STR, BAL, BLT, ERROR);
+    type enum_instruction is (MOV, ADDi, ADDr, CMP, LDR, STR, BAL, BLT, BX, ERROR);
     alias instr_courante is <<signal .instruction_decoder_tb.INSTRUCTION_DECODER_inst.instr_courante : enum_instruction >>;
     begin
         Instruction <= (others => '0');
@@ -148,6 +150,11 @@ begin
         assert instr_courante = BAL report "PC =PC+1+(-9) is a BLT operation";
         assert Imm24 = x"FFFFF7" report "PC =PC+1+(-9) with imm -9" severity error;
         -- todo: we should check the others are 0/Z
+
+        Instruction <= x"EB000000";
+        wait for 1 ns;
+        assert instr_courante = BX report "BX end interrupt instruction";
+        assert IRQ_END = '1' report "BX end interrupt instruction";
 
         report "No error detected";
         wait;
