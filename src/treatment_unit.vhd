@@ -20,7 +20,7 @@ architecture RTL of TREATMENT_UNIT is
 
 constant IMMsize : integer := 8;
 
-signal busA, busW, immediat, ALUout, DataOut, MuxALUout : std_logic_vector(31 downto 0);
+signal busA, busW, busb_int, immediat, ALUout, DataOut, MuxALUout : std_logic_vector(31 downto 0);
 begin
 Register_Bench_inst: entity work.Register_Bench
  port map(
@@ -32,14 +32,15 @@ Register_Bench_inst: entity work.Register_Bench
     RW => RW,
     WE => RegWr,
     A => busA,
-    B => busB
+    B => busB_int
 );
+
 MUX2x1_ALU_inst: entity work.MUX2x1
  generic map(
     N => 32
 )
  port map(
-    A => busB,
+    A => busB_int,
     B => immediat,
     COM => ALUsrc,
     S => MuxALUout
@@ -74,6 +75,7 @@ SIGN_EXTENDER_inst: entity work.SIGN_EXTENDER
     E => ImmediateRaw,
     S => immediat
 );
+
 MEMORY_inst: entity work.MEMORY
  generic map(
     WordSize => 32,
@@ -82,9 +84,11 @@ MEMORY_inst: entity work.MEMORY
  port map(
     CLK => CLK,
     RESET => RESET,
-    DataIn => busB,
+    DataIn => busB_int,
     DataOut => DataOut,
     Addr => ALUout(5 downto 0), -- the result == the address
     WrEn => MemWr
 );
+
+busB <= busb_int;
 end architecture;

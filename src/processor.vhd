@@ -89,12 +89,12 @@ Decoder: entity work.INSTRUCTION_DECODER
 );
 
 Reg_Aff: entity work.ONE_REGISTER
-    port map (
+   port map (
         Clk => Clk,
         Rst => Reset,
         DataIN => busB ,
         WE => RegAff,
-        DataOut => Afficheur 
-    );
+        DataOut => Afficheur
+);
 
 end architecture;

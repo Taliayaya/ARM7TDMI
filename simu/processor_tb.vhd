@@ -13,7 +13,7 @@ begin
 
     process
     begin
-        while now <= 1000 NS loop
+        while now <= 10000 NS loop
             Clk <= '0';
             wait for 5 NS;
             Clk <= '1';

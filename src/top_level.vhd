@@ -1,14 +1,11 @@
-
-
-
 library IEEE;
-  use IEEE.std_logic_1164.all;
-  use IEEE.numeric_std.all;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
 
 ENTITY TOP_LEVEL is
 	PORT
 	(
-		CLOCK 	:  IN  STD_LOGIC;
+		CLOCK_50 	:  IN  STD_LOGIC;
 		KEY			 	:  IN  STD_LOGIC_VECTOR(1 DOWNTO 0);
 		SW 				:  IN  STD_LOGIC_VECTOR(9 DOWNTO 0);
 		HEX0 			:  OUT  STD_LOGIC_VECTOR(0 TO 6);
@@ -20,19 +17,17 @@ END entity;
 
 ARCHITECTURE RTL OF TOP_LEVEL IS 
 
-	signal 	rst,clk, pol  : std_logic;
+	signal 	rst, clk, pol  : std_logic;
 	signal Afficheur: STD_LOGIC_VECTOR(31 downto 0);
 
 BEGIN 
 
+clk <= CLOCK_50;
 rst <= not KEY(0);
 pol <= SW(9);
 
-
--- instancier le FDIV, BCD_COUNTER, 4 fois le seven_SEg
-
 PROCESSOR: entity work.PROCESSOR port map (
-	CLK => CLOCK,
+	CLK => clk,
 	Reset => rst,
 	Afficheur => Afficheur
 );
