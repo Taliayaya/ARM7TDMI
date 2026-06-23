@@ -11,6 +11,8 @@ architecture BENCH of INSTRUCTION_HANDLER_UNIT_TB is
     signal Clk: STD_LOGIC;
     signal Reset: STD_LOGIC;
     signal Instruction: STD_LOGIC_VECTOR(31 downto 0);
+    signal VICPC: STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
+    signal IRQ, IRQ_END, IRQ_SERV: STD_LOGIC := '0';
 begin 
 
     process
@@ -26,11 +28,15 @@ begin
     
     IHU: entity work.INSTRUCTION_HANDLER_UNIT
     port map (
-        Clk => Clk,
-        Reset => Reset,
-        offset => offset,
-        nPCsel => nPCsel,
-        Instruction => Instruction
+        Clk         => Clk,
+        Reset       => Reset,
+        offset      => offset,
+        nPCsel      => nPCsel,
+        IRQ         => IRQ,
+        IRQ_END     => IRQ_END,
+        VICPC       => VICPC,
+        Instruction => Instruction,
+        IRQ_SERV    => IRQ_SERV
     );
 
     process

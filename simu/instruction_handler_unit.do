@@ -10,11 +10,11 @@ vcom -93 ../src/register.vhd \
 vsim INSTRUCTION_HANDLER_UNIT_TB
 
 view signals
-add wave *
-add wave -position insertpoint  sim:/instruction_handler_unit_tb/IHU/A
-add wave -position insertpoint  sim:/instruction_handler_unit_tb/IHU/B
-add wave -position insertpoint  sim:/instruction_handler_unit_tb/IHU/PC_in
-add wave -position insertpoint  sim:/instruction_handler_unit_tb/IHU/PC_out
-add wave -position insertpoint  sim:/instruction_handler_unit_tb/IHU/offset
+add wave -radix hex *
+add wave -radix hex -position insertpoint  sim:/instruction_handler_unit_tb/IHU/A
+add wave -radix hex -position insertpoint  sim:/instruction_handler_unit_tb/IHU/B
+add wave -radix hex -position insertpoint  sim:/instruction_handler_unit_tb/IHU/PC_in
+add wave -radix hex -position insertpoint  sim:/instruction_handler_unit_tb/IHU/PC_out
+add wave -radix hex -position insertpoint  sim:/instruction_handler_unit_tb/IHU/offset
 
 run -all
