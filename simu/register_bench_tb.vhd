@@ -94,7 +94,7 @@ begin
 
         wait for 10 ns;
 
--- R(3) = R(1) – R(15)
+-- R(3) = R(1) -  R(15)
 
         WE <= '1';
         OP <= "10";
@@ -106,13 +106,13 @@ begin
         WE <= '0';
 
         RA <= "0011";
-        wait for 10 ns;
+        wait for 3 ns;
         assert A = X"00000030" report "R(3) = R(1) - R(15) should save value" severity error;
 
         wait for 10 ns;
 
 
--- R(5) = R(7) – R(15)
+-- R(5) = R(7) -  R(15)
         
         WE <= '1';
         RW <= "0101";

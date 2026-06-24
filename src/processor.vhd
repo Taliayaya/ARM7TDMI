@@ -6,6 +6,8 @@ entity PROCESSOR is
     port (
         Clk : in std_logic;
         Reset: in std_logic;
+        IRQ0 : in std_logic;
+        IRQ1 : in std_logic;
         Afficheur: out STD_LOGIC_VECTOR(31 downto 0)
     );
 end entity;
@@ -18,6 +20,8 @@ architecture PRC of PROCESSOR is
     signal MemWr, RegWr, MemToReg : STD_LOGIC;
     signal RegSel,RegAff, PSREn, ALUSrc, nPCsel: std_logic;
     signal ALUCtr: STD_LOGIC_VECTOR(1 downto 0);
+    signal IRQ, IRQ_END, IRQ_SERV: STD_LOGIC;
+    signal  VICPC : STD_LOGIC_VECTOR(31 downto 0);
 begin
 
 Instruction_Handler_Unit: entity work.instruction_handler_unit
@@ -26,7 +30,22 @@ Instruction_Handler_Unit: entity work.instruction_handler_unit
     nPCsel => nPCsel,
     Clk => Clk,
     Reset => Reset,
+    IRQ => IRQ,
+    IRQ_END => IRQ_END,
+    VICPC => VICPC,
+    IRQ_SERV => IRQ_SERV,
     Instruction => Instruction
+);
+
+VIC: entity work.VIC 
+port map (
+    CLK => Clk,
+    RESET => Reset,
+    IRQ_SERV => IRQ_SERV,
+    IRQ0 => IRQ0,
+    IRQ1 => IRQ1,
+    IRQ => IRQ,
+    VICPC => VICPC  
 );
 
 MUX2x1: entity work.MUX2x1
@@ -85,7 +104,8 @@ Decoder: entity work.INSTRUCTION_DECODER
     RN => RN,
     RM => RM,
     Imm8 => Imm8,
-    Imm24 => Imm24
+    Imm24 => Imm24,
+    IRQ_END => IRQ_END -- TODO
 );
 
 Reg_Aff: entity work.ONE_REGISTER

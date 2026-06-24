@@ -18,6 +18,7 @@ END entity;
 ARCHITECTURE RTL OF TOP_LEVEL IS 
 
 	signal 	rst, clk, pol  : std_logic;
+	signal irq0, irq1 : std_logic;
 	signal Afficheur: STD_LOGIC_VECTOR(31 downto 0);
 
 BEGIN 
@@ -25,10 +26,14 @@ BEGIN
 clk <= CLOCK_50;
 rst <= not KEY(0);
 pol <= SW(9);
+irq0 <= SW(0);
+irq1 <= SW(1);
 
 PROCESSOR: entity work.PROCESSOR port map (
 	CLK => clk,
 	Reset => rst,
+	IRQ0 => irq0,
+	IRQ1 => irq1,
 	Afficheur => Afficheur
 );
 

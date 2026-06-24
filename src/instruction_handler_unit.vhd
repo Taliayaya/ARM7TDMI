@@ -26,6 +26,8 @@ architecture IHU of instruction_handler_unit is
     signal irq_active : std_logic := '0';
     signal A: std_logic_vector(31 downto 0);
     signal B: std_logic_vector(31 downto 0);
+    signal A_saved : std_logic_vector(31 downto 0);
+
 begin
 
     A <= STD_LOGIC_VECTOR(UNSIGNED(PC_out) + 1);
@@ -54,7 +56,7 @@ begin
     port map (
         Clk => Clk,
         Rst => Reset,
-        DataIN =>  A, -- we save PC + 1 instead of PC_out?
+        DataIN =>  A_saved, -- we save PC + 1 instead of PC_out?
         WE => LR_WE,
         DataOut =>  LR_out 
     );
@@ -85,9 +87,11 @@ begin
         elsif rising_edge(Clk) then
             LR_WE <= '0';
             IRQ_SERV <= '0';
+            A_saved     <= (others => '0');
             if IRQ = '1' and irq_active = '0' then
                 irq_active <= '1';
                 LR_WE <= '1';
+                A_saved <= A;
                 IRQ_SERV <= '1';
             elsif IRQ_END = '1' then 
                 irq_active <= '0';

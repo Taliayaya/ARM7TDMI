@@ -11,11 +11,18 @@ vcom -2008 ../src/instruction_decoder.vhd \
            ../src/instruction_memory.vhd \
            ../src/instruction_handler_unit.vhd \
            ../src/processor.vhd \
-         processor_tb.vhd
+           ../src/vic.vhd \
+         vic_processor_tb.vhd
 
-vsim processor_tb
+vsim vic_processor_tb
 
 view signals
 add wave -radix hex *
+add wave  -radix hex -position insertpoint  \
+sim:/vic_processor_tb/UUT/Instruction_Handler_Unit/VICPC
+add wave  -radix hex -position insertpoint  \
+sim:/vic_processor_tb/UUT/Instruction_Handler_Unit/IRQ_SERV
+add wave  -radix hex -position insertpoint  \
+sim:/vic_processor_tb/UUT/Instruction_Handler_Unit/IRQ_END
 
 run -all

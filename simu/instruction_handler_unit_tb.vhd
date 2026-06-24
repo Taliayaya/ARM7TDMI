@@ -89,9 +89,9 @@ begin
         wait for 10 ns;
         Reset <= '0';
         nPCsel <= '0';
-        wait for 80 ns; -- PC=8
+        wait for 80 ns; -- PC = 8
 
-        -- Goto index 0
+        -- Go to index 0
         nPCsel <= '1';
         offset <= x"FFFFF7";  -- -9  PC = 8+1+(-9) = 0
         wait for 10 ns;
