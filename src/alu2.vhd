@@ -6,8 +6,8 @@ entity ALU2 is
     port (
         op           : in std_logic_vector(1 downto 0);
         busA, busB   : in std_logic_vector(31 downto 0);
-        busW         : out std_logic_vector(31 downto 0);
-        flagN, flagZ : out std_logic
+        busW         : out std_logic_vector(31 downto 0) := (others => '0');
+        flagN, flagZ : out std_logic := '0'
     );
 end entity;
 
@@ -17,7 +17,7 @@ constant MOVB : std_logic_vector(1 downto 0) := "01";  -- Y = B
 constant SUB  : std_logic_vector(1 downto 0) := "10";  -- Y = A - B
 constant MOVA : std_logic_vector(1 downto 0) := "11";  -- Y = A
 
-signal result : signed(busW'range);
+signal result : signed(busW'range) := (others => '0');
 begin
 with op select
     result <= signed(busA) + signed(busB) when ADD,

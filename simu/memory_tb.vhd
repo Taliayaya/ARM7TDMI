@@ -11,8 +11,8 @@ end MEMORY_TB ;
 architecture BENCH of MEMORY_TB is
     constant DataSize : integer := 32;
 	signal DataIn, DataOut : std_logic_vector(DataSize - 1 downto 0);
-    signal Addr : std_logic_vector(5 downto 0);
-	signal CLK, RESET, WrEn : std_logic;
+    signal Addr : std_logic_vector(5 downto 0) := (others => '0');
+	signal CLK, RESET, WrEn : std_logic := '0';
 	
 begin
     process

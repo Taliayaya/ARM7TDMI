@@ -11,7 +11,7 @@ entity MEMORY is
         CLK     : in  std_logic;
         RESET   : in  std_logic;
         DataIn  : in  std_logic_vector(WordSize - 1 downto 0);
-        DataOut : out std_logic_vector(WordSize - 1 downto 0);
+        DataOut : out std_logic_vector(WordSize - 1 downto 0) := (others => '0');
         Addr    : in  std_logic_vector(AddrSize - 1 downto 0);
         WrEn    : in  std_logic
     );
@@ -28,7 +28,7 @@ architecture RTL of MEMORY is
         for i in 0 to WordCount - 1 loop
             result(i) := (others => '0');
         end loop;
-        -- Initialisation des données de 0x10 à 0x19
+        -- Initialisation des donnï¿½es de 0x10 ï¿½ 0x19
         result(16) := x"00000001";
         result(17) := x"00000002";
         result(18) := x"00000003";
@@ -48,7 +48,7 @@ begin
 
     process (CLK, RESET) begin
         if RESET = '1' then
-            table <= init_mem;       -- reset remet les données initiales
+            table <= init_mem;       -- reset remet les donnï¿½es initiales
         elsif rising_edge(CLK) then
             if WrEn = '1' then
                 table(to_integer(unsigned(Addr))) <= DataIn;

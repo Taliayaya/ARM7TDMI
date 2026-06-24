@@ -11,8 +11,8 @@ entity TREATMENT_UNIT is
         MemWr, RegWr  : in std_logic;
         MemToReg  : in std_logic;
         ImmediateRaw : in std_logic_vector(7 downto 0);
-        busB : out std_logic_vector(31 downto 0);
-        CPSR: out std_logic_vector(31 downto 0)
+        busB : out std_logic_vector(31 downto 0) := (others => '0');
+        CPSR: out std_logic_vector(31 downto 0) := (others => '0')
     );
 end entity;
 
@@ -20,7 +20,7 @@ architecture RTL of TREATMENT_UNIT is
 
 constant IMMsize : integer := 8;
 
-signal busA, busW, busb_int, immediat, ALUout, DataOut, MuxALUout : std_logic_vector(31 downto 0);
+signal busA, busW, busb_int, immediat, ALUout, DataOut, MuxALUout : std_logic_vector(31 downto 0) := (others => '0');
 begin
 Register_Bench_inst: entity work.Register_Bench
  port map(

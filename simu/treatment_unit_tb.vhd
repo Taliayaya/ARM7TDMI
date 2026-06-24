@@ -10,13 +10,12 @@ end TREATMENT_UNIT_TB ;
 
 architecture BENCH of TREATMENT_UNIT_TB is
     signal CLK, RESET   : std_logic;
-    signal RA, RB, RW   : std_logic_vector(3 downto 0);
-    signal ALUsrc       : std_logic;
-    signal ALUctr       : std_logic_vector(1 downto 0);
-    signal MemWr, RegWr : std_logic;
-    signal MemToReg     : std_logic;
-    signal busW         :  std_logic_vector(31 downto 0);
-    signal immediate    :  std_logic_vector(7 downto 0);
+    signal RA, RB, RW   : std_logic_vector(3 downto 0) := (others => '0');
+    signal ALUsrc       : std_logic := '0';
+    signal ALUctr       : std_logic_vector(1 downto 0) := (others => '0');
+    signal MemWr, RegWr : std_logic := '0';
+    signal MemToReg     : std_logic := '0';
+    signal immediate    :  std_logic_vector(7 downto 0) := (others => '0');
 
     constant ADD  : std_logic_vector(1 downto 0) := "00";  -- Y = A + B
     constant MOVB : std_logic_vector(1 downto 0) := "01";  -- Y = B
@@ -35,7 +34,7 @@ begin
         MemWr => MemWr,
         RegWr => RegWr,
         MemToReg => MemToReg,
-        busW => busW,
+        busB => open,
         ImmediateRaw => immediate
     );
     process
@@ -54,6 +53,7 @@ begin
     alias bench is <<signal .treatment_unit_tb.TREATMENT_UNIT_inst.Register_Bench_inst.Bench : table >>;
     type MEM_TABLE is array (0 to 63) of std_logic_vector(31 downto 0);
     alias memory is <<signal .treatment_unit_tb.TREATMENT_UNIT_inst.MEMORY_inst.table : MEM_TABLE>>; 
+    alias busW is <<signal .treatment_unit_tb.TREATMENT_UNIT_inst.busW : std_logic_vector(31 downto 0)>>; 
 	begin
         -- INIT --
         RA <= "0000";
@@ -92,7 +92,7 @@ begin
         wait for 10 ns;
         -- ADD 1 REGISTER AND IMMEDIATE -- 0x8 + 0x11 = 0x19
 
-        RW <= "0010";
+        RW <= "0001";
         immediate <= x"11";
         ALUctr <= ADD;
         ALUsrc <= '1';
@@ -215,6 +215,8 @@ begin
             severity error;
 
         wait for 10 ns;
+
+        -- r1 = r1 + 2 non testé ici mais ok sur un autre test 
 
 
 		report "End of test. Verify that no error was reported.";
