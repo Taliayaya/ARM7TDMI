@@ -91,7 +91,11 @@ begin
             if IRQ = '1' and irq_active = '0' then
                 irq_active <= '1';
                 LR_WE <= '1';
-                A_saved <= A;
+                if nPCsel = '0' then
+                    A_saved <= A;
+                else 
+                    A_saved <= B;
+                end if;
                 IRQ_SERV <= '1';
             elsif IRQ_END = '1' then 
                 irq_active <= '0';

@@ -88,10 +88,10 @@ begin
         WrSrc  <= '0';
         RegSel <= '0';
         RegAff <= '0';
-        RN     <= "ZZZZ";
-        RD     <= "ZZZZ";
-        RM     <= "ZZZZ"; -- default value for unused RM
-        ALUCtr <= "ZZ";   -- default value for unused ALU
+        RN     <= "0000";
+        RD     <= "0000";
+        RM     <= "0000"; -- default value for unused RM
+        ALUCtr <= "00";   -- default value for unused ALU
         ALUSrc <= '0';
         Imm8   <= (others => '0');
         Imm24  <= (others => '0');

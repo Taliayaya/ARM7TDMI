@@ -21,10 +21,11 @@ architecture RTL of INSTRUCTION_MEMORY is
             ram_block(3 ) := x"E0822000"; -- ADD R2,R2,R0 ; --R2 <= R2 + R0
             ram_block(4 ) := x"E2811001"; -- ADD R1,R1,#1 ; --R1 <= R1 + 1
             ram_block(5 ) := x"E351001A"; -- CMP R1,0x1A ; --? R1 = 0x1A
-            ram_block(6 ) := x"BAFFFFFB"; -- BLT loop ; --branchement � _loop si R1 inferieur a 0x1A
+            ram_block(6 ) := x"BAFFFFFB"; -- BLT loop ; --branchement � _loop si R1 inferieur a 0x1A
             ram_block(7 ) := x"E4012000"; -- STR R2,0(R1) ; --MEM[R1] <= R2
-            ram_block(8 ) := x"EAFFFFF7"; -- BAL main ; --branchement � _main
+            ram_block(8 ) := x"EAFFFFF7"; -- BAL main ; --branchement � _main
             -- ISR 0 : interruption 0
+            -- Elle augmente la valeur de départ du compteur à +1.
             --sauvegarde du contexte
             ram_block(9 ) := x"E60F1000"; -- STR R1,0(R15) ; --MEM[R15] <= R1
             ram_block(10) := x"E28FF001"; -- ADD R15,R15,1 ; --R15 <= R15 + 1
@@ -41,6 +42,7 @@ architecture RTL of INSTRUCTION_MEMORY is
             ram_block(19) := x"EB000000"; -- BX ; -- instruction de fin d'interruption
             ram_block(20) := x"00000000";
             -- ISR1 : interruption 1
+            -- Elle augmente la valeur de départ du compteur à +2.
             --sauvegarde du contexte - R15 correspond au pointeur de pile
             ram_block(21) := x"E60F4000"; -- STR R4,0(R15) ; --MEM[R15] <= R4
             ram_block(22) := x"E28FF001"; -- ADD R15,R15,1 ; --R15 <= R15 + 1

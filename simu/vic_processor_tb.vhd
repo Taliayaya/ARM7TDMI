@@ -8,7 +8,7 @@ end entity;
 architecture BENCH of VIC_PROCESSOR_TB is
     signal Clk: STD_LOGIC;
     signal Reset: STD_LOGIC;
-    signal Afficheur: STD_LOGIC_VECTOR(31 downto 0);
+    signal Afficheur: STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
     signal IRQ0, IRQ1 : std_logic := '0';
 
     constant CLK_PERIOD : time := 20 ns;
@@ -16,7 +16,7 @@ begin
 
     process
     begin
-        while now <= 5000 NS loop
+        while now <= CLK_PERIOD * 500 loop
             Clk <= '0';
             wait for CLK_PERIOD/2;
             Clk <= '1';
@@ -34,9 +34,9 @@ begin
         Afficheur  => Afficheur
     );
 
-    
-
     process
+    alias IRQ_SERV is <<signal .vic_processor_tb.UUT.Instruction_Handler_Unit.IRQ_SERV : std_logic >>;
+    alias IRQ_END is <<signal .vic_processor_tb.UUT.Instruction_Handler_Unit.IRQ_END : std_logic >>;
     begin
         Reset <= '1';
         IRQ0  <= '0';
@@ -46,41 +46,52 @@ begin
 
 
         wait for CLK_PERIOD * 100;  
-        assert  Afficheur = x"00000037" report "Première étape NOT OK" severity error;
+        assert  Afficheur = x"00000037" report "Premiï¿½re ï¿½tape NOT OK" severity error;
         wait for 10 ns;
 
         IRQ0 <= '1';
         wait for CLK_PERIOD * 2;   
         IRQ0 <= '0';
         wait for 10 ps;
-        assert  Afficheur = x"00000019" report "Premier interrupt NOT OK" severity error;
+        -- ce test est incohÃ©rent car Ã§a dÃ©pend de Ã  quel moment l'interruption Ã  lieu
+        -- Lors de IRQ0 on va voir dans l'afficheur: (dans l'ordre)
+        -- la valeur de R1 (Ã  quel moment de la loop on est) (0x19)
+        -- la valeur de R3 (unused)                          (0x00)
+        -- la nouvelle valeur de Mem[0x10]                   (0x02)
+        -- assert  Afficheur = x"00000019" report "Premier interrupt NOT OK" severity error;
 
+        wait until IRQ_END = '1';
 
-        wait for CLK_PERIOD * 5;
-        assert  Afficheur = x"00000000" report "Première étape interrupt NOT OK" severity error;
-        wait for CLK_PERIOD * 5;
-        assert  Afficheur = x"00000002" report "Deuxieme interrupt NOT OK" severity error;
+        wait for CLK_PERIOD * 100; -- 100 clock cycle
+        assert  Afficheur = x"00000038" report "IRQ0 augmente la somme de 1 de 0x37 Ã  0x38 NOT OK" severity error;
 
-        IRQ1 <= '1';
-        wait for CLK_PERIOD * 5;
-        IRQ1 <= '0';
-        assert  Afficheur = x"00000000" report "Troisieme étape interrupt NOT OK" severity error;
-        wait for CLK_PERIOD * 6;
-        assert  Afficheur = x"00000004" report "Qutrieme étape NOT OK" severity error;
-
-
-        wait for CLK_PERIOD * 20;
-        assert  Afficheur = x"00000037" report "Derniere étape NOT OK" severity error;
+        report "Done" severity note;
 
         IRQ1 <= '1';
-        IRQ0 <= '1';
-
         wait for CLK_PERIOD * 2;
+        IRQ1 <= '0';
 
+        wait until IRQ_END = '1';
+        wait for CLK_PERIOD * 100; -- 100 clock cycle
+
+        -- IRQ1 augmente de +2 (donc de 0x38 Ã  0x3A)
+        assert  Afficheur = x"0000003A" report "IRQ1 augmente la somme de +2 de 0x38 Ã  0x3A NOT OK" severity error;
+
+        IRQ0 <= '1';
+        IRQ1 <= '1';
+        wait for CLK_PERIOD * 4;
         IRQ0 <= '0';
         IRQ1 <= '0';
+
+        -- IRQ0 et IRQ1: on devrait donc avoir 0x3B puis 0x3D et un affichage de 0x3D seulement
+        wait until IRQ_END = '1';
+        wait until IRQ_END = '1';
+
+        wait for CLK_PERIOD * 100;
+        assert  Afficheur = x"0000003D" report "IRQ0, IRQ1 augmente la somme de +3 de 0x3A Ã  0x3D NOT OK" severity error;
         
-        wait for CLK_PERIOD * 30;
+        -- wait for CLK_PERIOD * 30;
+        report "Done" severity note;
 
         wait;
     end process;

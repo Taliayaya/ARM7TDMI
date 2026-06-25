@@ -13,15 +13,15 @@ entity PROCESSOR is
 end entity;
 
 architecture PRC of PROCESSOR is 
-    signal Instruction, busB, CPSR, CPSR_Out: STD_LOGIC_VECTOR(31 downto 0);
-    signal Imm24: STD_LOGIC_VECTOR(23 downto 0);
-    signal Imm8: STD_LOGIC_VECTOR(7 downto 0);
-    signal RD, RN, RM, RMD : STD_LOGIC_VECTOR(3 downto 0);
-    signal MemWr, RegWr, MemToReg : STD_LOGIC;
-    signal RegSel,RegAff, PSREn, ALUSrc, nPCsel: std_logic;
-    signal ALUCtr: STD_LOGIC_VECTOR(1 downto 0);
-    signal IRQ, IRQ_END, IRQ_SERV: STD_LOGIC;
-    signal  VICPC : STD_LOGIC_VECTOR(31 downto 0);
+    signal Instruction, busB, CPSR, CPSR_Out    : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
+    signal Imm24                                : STD_LOGIC_VECTOR(23 downto 0) := (others => '0');
+    signal Imm8                                 : STD_LOGIC_VECTOR(7 downto 0)  := (others => '0');
+    signal RD, RN, RM, RMD                      : STD_LOGIC_VECTOR(3 downto 0)  := (others => '0');
+    signal MemWr, RegWr, MemToReg               : STD_LOGIC                     := '0';
+    signal RegSel,RegAff, PSREn, ALUSrc, nPCsel : std_logic                     := '0';
+    signal ALUCtr                               : STD_LOGIC_VECTOR(1 downto 0)  := (others => '0');
+    signal IRQ, IRQ_END, IRQ_SERV               : STD_LOGIC                     := '0';
+    signal  VICPC                               : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
 begin
 
 Instruction_Handler_Unit: entity work.instruction_handler_unit
