@@ -24,10 +24,10 @@ ARCHITECTURE RTL OF TOP_LEVEL IS
 BEGIN 
 
 clk <= CLOCK_50;
-rst <= not KEY(0);
+rst <= SW(0);
 pol <= SW(9);
-irq0 <= SW(0);
-irq1 <= SW(1);
+irq0 <= not KEY(0);
+irq1 <= not KEY(1);
 
 PROCESSOR: entity work.PROCESSOR port map (
 	CLK => clk,
